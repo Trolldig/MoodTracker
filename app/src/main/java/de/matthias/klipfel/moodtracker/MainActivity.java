@@ -7,10 +7,14 @@ import android.view.View;
 import android.widget.Button;
 
 import android.os.Bundle;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button button;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
                 openVoteActivity();
             }
         });
+        imageView = findViewById(R.id.imageView);
+        Glide.with(this)
+                .load(R.drawable.background_main)
+                .into(imageView);
     }
 
     public void openVoteActivity(){
