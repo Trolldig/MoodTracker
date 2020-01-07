@@ -12,18 +12,25 @@ import com.hsalf.smilerating.SmileRating;
 public class VoteActivity extends AppCompatActivity {
 
     private static final String TAG = "VoteActivity";
-    private static String [] pa1 = {"aktiv","interessiert","stark"};
+    private static String [] pa1 = {"aktiv","interessiert","freudig erregt", "stark"};
+    private static String [] pa2 = {"angeregt","stolz","begeistert", "wach"};
+    private static String [] pa3 = {"entschlossen","aufmerksam"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote);
 
+        //Set random value for the textViews
         TextView textPos1 = (TextView) findViewById(R.id.textPos1);
         textPos1.setText(selectRand(pa1));
+        TextView textPos2 = (TextView) findViewById(R.id.textPos2);
+        textPos2.setText(selectRand(pa2));
+        TextView textPos3 = (TextView) findViewById(R.id.textPos3);
+        textPos3.setText(selectRand(pa3));
 
         //Get Id of the first positive Vote
-        SmileRating posAff1 = (SmileRating) findViewById(R.id.smile_rating);
+        SmileRating posAff1 = (SmileRating) findViewById(R.id.ratingPos1);
         //Change name of smileys
         posAff1.setNameForSmile(BaseRating.TERRIBLE, "Gar nicht");
         posAff1.setNameForSmile(BaseRating.BAD, "Wenig");
