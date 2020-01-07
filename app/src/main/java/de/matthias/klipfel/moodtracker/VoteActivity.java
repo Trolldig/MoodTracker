@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.hsalf.smilerating.BaseRating;
 import com.hsalf.smilerating.SmileRating;
@@ -12,11 +12,15 @@ import com.hsalf.smilerating.SmileRating;
 public class VoteActivity extends AppCompatActivity {
 
     private static final String TAG = "VoteActivity";
+    private static String [] pa1 = {"aktiv","interessiert","stark"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote);
+
+        TextView textPos1 = (TextView) findViewById(R.id.textPos1);
+        textPos1.setText(selectRand(pa1));
 
         //Get Id of the first positive Vote
         SmileRating posAff1 = (SmileRating) findViewById(R.id.smile_rating);
@@ -59,5 +63,9 @@ public class VoteActivity extends AppCompatActivity {
                 Log.i(TAG, "Level: " + level);
             }
         });
+    }
+    protected static String selectRand(String[] array){
+        int rnd = (int)(Math.random()*array.length);
+        return array[rnd];
     }
 }
