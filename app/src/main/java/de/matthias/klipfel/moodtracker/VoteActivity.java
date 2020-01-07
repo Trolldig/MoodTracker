@@ -24,7 +24,7 @@ public class VoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote);
 
-        //Set random value for the textViews
+        //Set random Text for the textViews
         TextView textPos1 = (TextView) findViewById(R.id.textPos1);
         textPos1.setText(selectRand(pa1));
         TextView textPos2 = (TextView) findViewById(R.id.textPos2);
