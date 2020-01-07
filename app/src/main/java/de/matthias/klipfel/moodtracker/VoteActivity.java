@@ -15,6 +15,9 @@ public class VoteActivity extends AppCompatActivity {
     private static String [] pa1 = {"aktiv","interessiert","freudig erregt", "stark"};
     private static String [] pa2 = {"angeregt","stolz","begeistert", "wach"};
     private static String [] pa3 = {"entschlossen","aufmerksam"};
+    private static String [] neg1 = {"bekümmert","verärgert","schuldig", "erschrocken"};
+    private static String [] neg2 = {"feindselig","gereizt","beschämt", "nervös"};
+    private static String [] neg3 = {"durcheinander","ängstlich"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,12 @@ public class VoteActivity extends AppCompatActivity {
         textPos2.setText(selectRand(pa2));
         TextView textPos3 = (TextView) findViewById(R.id.textPos3);
         textPos3.setText(selectRand(pa3));
+        TextView textNeg1 = (TextView) findViewById(R.id.textNeg1);
+        textNeg1.setText(selectRand(neg1));
+        TextView textNeg2 = (TextView) findViewById(R.id.textNeg2);
+        textNeg2.setText(selectRand(neg2));
+        TextView textNeg3 = (TextView) findViewById(R.id.textNeg3);
+        textNeg3.setText(selectRand(neg3));
 
         //Get Id of the first positive Vote
         SmileRating posAff1 = (SmileRating) findViewById(R.id.ratingPos1);
