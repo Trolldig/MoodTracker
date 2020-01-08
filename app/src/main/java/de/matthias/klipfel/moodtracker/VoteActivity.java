@@ -38,14 +38,22 @@ public class VoteActivity extends AppCompatActivity {
         TextView textNeg3 = (TextView) findViewById(R.id.textNeg3);
         textNeg3.setText(selectRand(neg3));
 
-        //Get Id of the first positive Vote
+        //Get Id of the smiles ratings and add them to an array
         SmileRating posAff1 = (SmileRating) findViewById(R.id.ratingPos1);
+        SmileRating posAff2 = (SmileRating) findViewById(R.id.ratingPos2);
+        SmileRating posAff3 = (SmileRating) findViewById(R.id.ratingPos3);
+        SmileRating negAff1 = (SmileRating) findViewById(R.id.ratingNeg1);
+        SmileRating negAff2 = (SmileRating) findViewById(R.id.ratingNeg2);
+        SmileRating negAff3 = (SmileRating) findViewById(R.id.ratingNeg3);
+
         //Change name of smileys
-        posAff1.setNameForSmile(BaseRating.TERRIBLE, "Gar nicht");
-        posAff1.setNameForSmile(BaseRating.BAD, "Wenig");
-        posAff1.setNameForSmile(BaseRating.OKAY, "Einigermaßen");
-        posAff1.setNameForSmile(BaseRating.GOOD, "Erheblich");
-        posAff1.setNameForSmile(BaseRating.GREAT, "Äußerst");
+        setSmileRatingNames(posAff1);
+        setSmileRatingNames(posAff2);
+        setSmileRatingNames(posAff3);
+        setSmileRatingNames(negAff1);
+        setSmileRatingNames(negAff2);
+        setSmileRatingNames(negAff3);
+
         //Set Listener for the first Vote
         posAff1.setOnSmileySelectionListener(new SmileRating.OnSmileySelectionListener() {
             @Override
@@ -80,8 +88,18 @@ public class VoteActivity extends AppCompatActivity {
             }
         });
     }
+
+    protected void setSmileRatingNames(SmileRating rating){
+        rating.setNameForSmile(BaseRating.TERRIBLE, "Gar nicht");
+        rating.setNameForSmile(BaseRating.BAD, "Wenig");
+        rating.setNameForSmile(BaseRating.OKAY, "Einigermaßen");
+        rating.setNameForSmile(BaseRating.GOOD, "Erheblich");
+        rating.setNameForSmile(BaseRating.GREAT, "Äußerst");
+    }
+
     protected static String selectRand(String[] array){
         int rnd = (int)(Math.random()*array.length);
         return array[rnd];
     }
+
 }
