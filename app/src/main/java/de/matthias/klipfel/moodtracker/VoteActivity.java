@@ -12,12 +12,12 @@ import com.hsalf.smilerating.SmileRating;
 public class VoteActivity extends AppCompatActivity {
 
     private static final String TAG = "VoteActivity";
-    private static String [] pa1 = {"aktiv","interessiert","freudig erregt", "stark"};
-    private static String [] pa2 = {"angeregt","stolz","begeistert", "wach"};
-    private static String [] pa3 = {"entschlossen","aufmerksam"};
-    private static String [] neg1 = {"bekümmert","verärgert","schuldig", "erschrocken"};
-    private static String [] neg2 = {"feindselig","gereizt","beschämt", "nervös"};
-    private static String [] neg3 = {"durcheinander","ängstlich"};
+    private static String [] pa1 = {"Aktiv","Interessiert","Freudig erregt", "Stark"};
+    private static String [] pa2 = {"Angeregt","Stolz","Begeistert", "Wach"};
+    private static String [] pa3 = {"Entschlossen","Aufmerksam"};
+    private static String [] neg1 = {"Bekümmert","Verärgert","Schuldig", "Erschrocken"};
+    private static String [] neg2 = {"Feindselig","Gereizt","Beschämt", "Nervös"};
+    private static String [] neg3 = {"Durcheinander","Ängstlich"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
