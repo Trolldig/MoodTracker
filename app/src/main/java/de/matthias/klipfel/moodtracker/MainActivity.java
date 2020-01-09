@@ -21,7 +21,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Button for the voting activity
         button = (Button) findViewById(R.id.voteButton);
+        button.setText("Wie Geht's?");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
