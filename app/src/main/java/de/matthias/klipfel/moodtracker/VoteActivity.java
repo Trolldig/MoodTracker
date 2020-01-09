@@ -25,26 +25,26 @@ public class VoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vote);
 
         //Set random Text for the textViews
-        TextView textPos1 = (TextView) findViewById(R.id.textPos1);
+        TextView textPos1 = findViewById(R.id.textPos1);
         textPos1.setText(selectRand(pa1));
-        TextView textPos2 = (TextView) findViewById(R.id.textPos2);
+        TextView textPos2 = findViewById(R.id.textPos2);
         textPos2.setText(selectRand(pa2));
-        TextView textPos3 = (TextView) findViewById(R.id.textPos3);
+        TextView textPos3 = findViewById(R.id.textPos3);
         textPos3.setText(selectRand(pa3));
-        TextView textNeg1 = (TextView) findViewById(R.id.textNeg1);
+        TextView textNeg1 = findViewById(R.id.textNeg1);
         textNeg1.setText(selectRand(neg1));
-        TextView textNeg2 = (TextView) findViewById(R.id.textNeg2);
+        TextView textNeg2 = findViewById(R.id.textNeg2);
         textNeg2.setText(selectRand(neg2));
-        TextView textNeg3 = (TextView) findViewById(R.id.textNeg3);
+        TextView textNeg3 = findViewById(R.id.textNeg3);
         textNeg3.setText(selectRand(neg3));
 
         //Get Id of the smiles ratings and add them to an array
-        SmileRating posAff1 = (SmileRating) findViewById(R.id.ratingPos1);
-        SmileRating posAff2 = (SmileRating) findViewById(R.id.ratingPos2);
-        SmileRating posAff3 = (SmileRating) findViewById(R.id.ratingPos3);
-        SmileRating negAff1 = (SmileRating) findViewById(R.id.ratingNeg1);
-        SmileRating negAff2 = (SmileRating) findViewById(R.id.ratingNeg2);
-        SmileRating negAff3 = (SmileRating) findViewById(R.id.ratingNeg3);
+        SmileRating posAff1 = findViewById(R.id.ratingPos1);
+        SmileRating posAff2 = findViewById(R.id.ratingPos2);
+        SmileRating posAff3 = findViewById(R.id.ratingPos3);
+        SmileRating negAff1 = findViewById(R.id.ratingNeg1);
+        SmileRating negAff2 = findViewById(R.id.ratingNeg2);
+        SmileRating negAff3 = findViewById(R.id.ratingNeg3);
 
         //Change name of smileys
         setSmileRatingNames(posAff1);
