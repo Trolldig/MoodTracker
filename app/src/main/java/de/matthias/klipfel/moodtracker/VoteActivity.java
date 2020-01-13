@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.hsalf.smilerating.BaseRating;
@@ -19,32 +20,46 @@ public class VoteActivity extends AppCompatActivity {
     private static String [] neg2 = {"Feindselig","Gereizt","Beschämt", "Nervös"};
     private static String [] neg3 = {"Durcheinander","Ängstlich"};
 
+    private TextView textPos1;
+    private TextView textPos2;
+    private TextView textPos3;
+    private TextView textNeg1;
+    private TextView textNeg2;
+    private TextView textNeg3;
+    private SmileRating posAff1;
+    private SmileRating posAff2;
+    private SmileRating posAff3;
+    private SmileRating negAff1;
+    private SmileRating negAff2;
+    private SmileRating negAff3;
+    private Button safeButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote);
 
         //Set random Text for the textViews
-        TextView textPos1 = findViewById(R.id.textPos1);
+        textPos1 = findViewById(R.id.textPos1);
         textPos1.setText(selectRand(pa1));
-        TextView textPos2 = findViewById(R.id.textPos2);
+        textPos2 = findViewById(R.id.textPos2);
         textPos2.setText(selectRand(pa2));
-        TextView textPos3 = findViewById(R.id.textPos3);
+        textPos3 = findViewById(R.id.textPos3);
         textPos3.setText(selectRand(pa3));
-        TextView textNeg1 = findViewById(R.id.textNeg1);
+        textNeg1 = findViewById(R.id.textNeg1);
         textNeg1.setText(selectRand(neg1));
-        TextView textNeg2 = findViewById(R.id.textNeg2);
+        textNeg2 = findViewById(R.id.textNeg2);
         textNeg2.setText(selectRand(neg2));
-        TextView textNeg3 = findViewById(R.id.textNeg3);
+        textNeg3 = findViewById(R.id.textNeg3);
         textNeg3.setText(selectRand(neg3));
 
         //Get Id of the smiles ratings and add them to an array
-        SmileRating posAff1 = findViewById(R.id.ratingPos1);
-        SmileRating posAff2 = findViewById(R.id.ratingPos2);
-        SmileRating posAff3 = findViewById(R.id.ratingPos3);
-        SmileRating negAff1 = findViewById(R.id.ratingNeg1);
-        SmileRating negAff2 = findViewById(R.id.ratingNeg2);
-        SmileRating negAff3 = findViewById(R.id.ratingNeg3);
+        posAff1 = findViewById(R.id.ratingPos1);
+        posAff2 = findViewById(R.id.ratingPos2);
+        posAff3 = findViewById(R.id.ratingPos3);
+        negAff1 = findViewById(R.id.ratingNeg1);
+        negAff2 = findViewById(R.id.ratingNeg2);
+        negAff3 = findViewById(R.id.ratingNeg3);
 
         //Change name of smileys
         setSmileRatingNames(posAff1);
@@ -53,6 +68,9 @@ public class VoteActivity extends AppCompatActivity {
         setSmileRatingNames(negAff1);
         setSmileRatingNames(negAff2);
         setSmileRatingNames(negAff3);
+
+        safeButton = (Button) findViewById(R.id.safeButton);
+        safeButton.setText("Übernehmen");
 
         //Set Listener for the first Vote
         posAff1.setOnSmileySelectionListener(new SmileRating.OnSmileySelectionListener() {

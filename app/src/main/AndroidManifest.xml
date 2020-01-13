@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".VoteActivity"
-            android:label = "Aktuelles Gemüt"
+            android:label = "Wie geht's dir gerade?"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
