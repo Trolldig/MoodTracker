@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String DATA ="de.matthias.klipfel.moodtracker.MainActivity.DATA";
+
     private Button button;
     private ImageView imageView;
 

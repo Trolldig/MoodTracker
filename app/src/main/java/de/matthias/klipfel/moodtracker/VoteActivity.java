@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -13,12 +14,13 @@ import com.hsalf.smilerating.SmileRating;
 public class VoteActivity extends AppCompatActivity {
 
     private static final String TAG = "VoteActivity";
-    private static String [] pa1 = {"Aktiv","Interessiert","Freudig erregt", "Stark"};
-    private static String [] pa2 = {"Angeregt","Stolz","Begeistert", "Wach"};
-    private static String [] pa3 = {"Entschlossen","Aufmerksam"};
-    private static String [] neg1 = {"Bekümmert","Verärgert","Schuldig", "Erschrocken"};
-    private static String [] neg2 = {"Feindselig","Gereizt","Beschämt", "Nervös"};
-    private static String [] neg3 = {"Durcheinander","Ängstlich"};
+    private static final String [] pa1 = {"Aktiv","Interessiert","Freudig erregt", "Stark"};
+    private static final String [] pa2 = {"Angeregt","Stolz","Begeistert", "Wach"};
+    private static final String [] pa3 = {"Entschlossen","Aufmerksam"};
+    private static final String [] neg1 = {"Bekümmert","Verärgert","Schuldig", "Erschrocken"};
+    private static final String [] neg2 = {"Feindselig","Gereizt","Beschämt", "Nervös"};
+    private static final String [] neg3 = {"Durcheinander","Ängstlich"};
+
 
     private TextView textPos1;
     private TextView textPos2;
@@ -120,4 +122,6 @@ public class VoteActivity extends AppCompatActivity {
         return array[rnd];
     }
 
+    public void returnVote(View view) {
+    }
 }
