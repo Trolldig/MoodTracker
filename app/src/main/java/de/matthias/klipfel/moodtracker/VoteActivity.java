@@ -140,6 +140,10 @@ public class VoteActivity extends AppCompatActivity {
     public void returnVote(View view) {
         int levelPA1 = posAff1.getRating();
         int levelPA2 = posAff2.getRating();
+        int levelPA3 = posAff3.getRating();
+        int levelNA1 = negAff1.getRating();
+        int levelNA2 = negAff2.getRating();
+        int levelNA3 = negAff3.getRating();
         testText = (TextView) findViewById(R.id.testTextView);
         testText.setText(Integer.toString(levelPA1)+" "+Integer.toString(levelPA2));
     }
