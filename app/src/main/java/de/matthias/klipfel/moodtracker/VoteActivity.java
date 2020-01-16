@@ -28,6 +28,7 @@ public class VoteActivity extends AppCompatActivity {
     private TextView textNeg1;
     private TextView textNeg2;
     private TextView textNeg3;
+    private TextView testText;
     private SmileRating posAff1;
     private SmileRating posAff2;
     private SmileRating posAff3;
@@ -74,7 +75,20 @@ public class VoteActivity extends AppCompatActivity {
         safeButton = (Button) findViewById(R.id.safeButton);
         safeButton.setText("Übernehmen");
 
+        /**Test to show the selected data
+        safeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int levelPA1 = posAff1.getRating();
+                int levelPA2 = posAff2.getRating();
+                testText = (TextView) findViewById(R.id.testTextView);
+                testText.setText(Integer.toString(levelPA1)+" "+Integer.toString(levelPA2));
+            }
+        });
+        **/
+
         //Set Listener for the first Vote
+        /**
         posAff1.setOnSmileySelectionListener(new SmileRating.OnSmileySelectionListener() {
             @Override
             public void onSmileySelected( int smiley, boolean reselected){
@@ -107,6 +121,7 @@ public class VoteActivity extends AppCompatActivity {
                 Log.i(TAG, "Level: " + level);
             }
         });
+         **/
     }
 
     protected void setSmileRatingNames(SmileRating rating){
@@ -123,5 +138,9 @@ public class VoteActivity extends AppCompatActivity {
     }
 
     public void returnVote(View view) {
+        int levelPA1 = posAff1.getRating();
+        int levelPA2 = posAff2.getRating();
+        testText = (TextView) findViewById(R.id.testTextView);
+        testText.setText(Integer.toString(levelPA1)+" "+Integer.toString(levelPA2));
     }
 }
