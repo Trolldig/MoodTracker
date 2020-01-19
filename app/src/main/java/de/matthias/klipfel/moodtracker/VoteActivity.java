@@ -10,6 +10,12 @@ import android.widget.TextView;
 
 import com.hsalf.smilerating.BaseRating;
 import com.hsalf.smilerating.SmileRating;
+import org.joda.time.YearMonthDay;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class VoteActivity extends AppCompatActivity {
 
@@ -144,7 +150,13 @@ public class VoteActivity extends AppCompatActivity {
         int levelNA1 = negAff1.getRating();
         int levelNA2 = negAff2.getRating();
         int levelNA3 = negAff3.getRating();
+        //get current date
+        Date date = new Date();
+        //formats date as described
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //display in text view for testing
         testText = (TextView) findViewById(R.id.testTextView);
-        testText.setText(Integer.toString(levelPA1)+" "+Integer.toString(levelPA2));
+        testText.setText(Integer.toString(levelPA1)+" "+Integer.toString(levelPA2) + " "
+                + dateFormat.format(date));
     }
 }
