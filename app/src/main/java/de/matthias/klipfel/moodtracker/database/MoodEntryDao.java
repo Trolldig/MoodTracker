@@ -1,4 +1,4 @@
-package de.matthias.klipfel.moodtracker;
+package de.matthias.klipfel.moodtracker.database;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import de.matthias.klipfel.moodtracker.database.MoodEntry;
 
 @Dao
 public interface MoodEntryDao {

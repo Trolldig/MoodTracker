@@ -2,6 +2,9 @@ package de.matthias.klipfel.moodtracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
+import de.matthias.klipfel.moodtracker.database.MoodEntry;
+import de.matthias.klipfel.moodtracker.database.MoodEntryRepository;
+import de.matthias.klipfel.moodtracker.database.MoodEntryRoomDatabase;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,16 +14,14 @@ import android.widget.TextView;
 
 import com.hsalf.smilerating.BaseRating;
 import com.hsalf.smilerating.SmileRating;
-import org.joda.time.YearMonthDay;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class VoteActivity extends AppCompatActivity {
 
-    public static MoodEntryRoomDatabase moodEntryRoomDatabase;
+    public MoodEntryRepository repository;
     private static final String TAG = "VoteActivity";
     private static final String [] pa1 = {"Aktiv","Interessiert","Freudig erregt", "Stark"};
     private static final String [] pa2 = {"Angeregt","Stolz","Begeistert", "Wach"};
@@ -50,8 +51,10 @@ public class VoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote);
 
-        moodEntryRoomDatabase = Room.databaseBuilder(getApplicationContext(),
-                MoodEntryRoomDatabase.class, "mooddb").build();
+        //moodEntryRoomDatabase = Room.databaseBuilder(getApplicationContext(),
+        //        MoodEntryRoomDatabase.class, "mooddb").build();
+
+        repository = new MoodEntryRepository(getApplication());
 
         //Set random Text for the textViews
         textPos1 = findViewById(R.id.textPos1);
@@ -168,7 +171,7 @@ public class VoteActivity extends AppCompatActivity {
         testText.setText(Integer.toString(PATotal)+" " + Integer.toString(NATotal) + " "
                 + datum);
         //save in database
-        VoteActivity.moodEntryRoomDatabase.moodEntryDao().insert(new MoodEntry(PATotal,NATotal,datum));
+        repository.insertMoodEntry(new MoodEntry(PATotal,NATotal,datum));
         Log.i("Room","added");
     }
 }

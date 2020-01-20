@@ -1,4 +1,4 @@
-package de.matthias.klipfel.moodtracker;
+package de.matthias.klipfel.moodtracker.database;
 
 import android.app.Application;
 
@@ -21,5 +21,5 @@ public class MoodEntryViewModel extends ViewModel {
 
     LiveData<List<MoodEntry>> getmAllMoodEntries() { return mAllMoodEntries; }
 
-    public void insert (MoodEntry moodEntry) { mRepository.insert(moodEntry);}
+    public void insert (MoodEntry moodEntry) { mRepository.insertMoodEntry(moodEntry);}
 }

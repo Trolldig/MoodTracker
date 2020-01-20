@@ -1,4 +1,4 @@
-package de.matthias.klipfel.moodtracker;
+package de.matthias.klipfel.moodtracker.database;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

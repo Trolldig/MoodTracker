@@ -1,4 +1,4 @@
-package de.matthias.klipfel.moodtracker;
+package de.matthias.klipfel.moodtracker.database;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -12,7 +12,7 @@ public class MoodEntryRepository {
     private MoodEntryDao mMoodEntryDao;
     private LiveData<List<MoodEntry>> mAllMoodEntries;
 
-    MoodEntryRepository(Application application) {
+    public MoodEntryRepository(Application application) {
         MoodEntryRoomDatabase db = MoodEntryRoomDatabase.getDatabase(application);
         mMoodEntryDao = db.moodEntryDao();
         mAllMoodEntries = mMoodEntryDao.getAllMoodEntries();
@@ -22,21 +22,24 @@ public class MoodEntryRepository {
         return mAllMoodEntries;
     }
 
-    public void insert (MoodEntry moodEntry) {
+    public void insertMoodEntry (MoodEntry moodEntry) {
         new insertAsyncTask(mMoodEntryDao).execute(moodEntry);
     }
 
+    /**
+     * {@link AsyncTask} for inserting operations.
+     */
     private static class insertAsyncTask extends AsyncTask<MoodEntry, Void, Void> {
 
-        private MoodEntryDao mAsyncTaskDao;
+        private final MoodEntryDao moodEntryDao;
 
         insertAsyncTask(MoodEntryDao dao) {
-            mAsyncTaskDao = dao;
+            moodEntryDao = dao;
         }
 
         @Override
-        protected Void doInBackground(final MoodEntry... params) {
-            mAsyncTaskDao.insert(params[0]);
+        protected Void doInBackground(MoodEntry... moodEntries) {
+            moodEntryDao.insert(moodEntries[0]);
             return null;
         }
     }
