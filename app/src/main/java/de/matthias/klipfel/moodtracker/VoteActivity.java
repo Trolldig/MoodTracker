@@ -1,6 +1,7 @@
 package de.matthias.klipfel.moodtracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import java.util.Date;
 
 public class VoteActivity extends AppCompatActivity {
 
+    public static MoodEntryRoomDatabase moodEntryRoomDatabase;
     private static final String TAG = "VoteActivity";
     private static final String [] pa1 = {"Aktiv","Interessiert","Freudig erregt", "Stark"};
     private static final String [] pa2 = {"Angeregt","Stolz","Begeistert", "Wach"};
@@ -47,6 +49,9 @@ public class VoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote);
+
+        moodEntryRoomDatabase = Room.databaseBuilder(getApplicationContext(),
+                MoodEntryRoomDatabase.class, "mooddb").build();
 
         //Set random Text for the textViews
         textPos1 = findViewById(R.id.textPos1);
@@ -154,9 +159,16 @@ public class VoteActivity extends AppCompatActivity {
         Date date = new Date();
         //formats date as described
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //prepares data for saving
+        int PATotal = levelPA1 + levelPA2 + levelPA3;
+        int NATotal = levelNA1 + levelNA2 + levelNA3;
+        String datum = dateFormat.format(date);
         //display in text view for testing
         testText = (TextView) findViewById(R.id.testTextView);
-        testText.setText(Integer.toString(levelPA1)+" "+Integer.toString(levelPA2) + " "
-                + dateFormat.format(date));
+        testText.setText(Integer.toString(PATotal)+" " + Integer.toString(NATotal) + " "
+                + datum);
+        //save in database
+        VoteActivity.moodEntryRoomDatabase.moodEntryDao().insert(new MoodEntry(PATotal,NATotal,datum));
+        Log.i("Room","added");
     }
 }
