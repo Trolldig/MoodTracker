@@ -54,15 +54,26 @@ public class GraphActivity extends AppCompatActivity {
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
 
-        cartesian.title("Trend of Sales of the Most Popular Products of ACME Corp.");
+        cartesian.title("Stimmung des Monats");
 
-        cartesian.yAxis(0).title("Number of Bottles Sold (thousands)");
+        cartesian.yAxis(0).title("Affekt-Wert");
         cartesian.xAxis(0).labels().padding(5d, 5d, 5d, 5d);
+        cartesian.xAxis(0).title("Tag");
 
         List<MoodEntry> moodData = getListOfMoodEntriesMonth(1);
-        MoodEntry moodEntry = moodData.get(0);
+        //MoodEntry moodEntry = moodData.get(0);
 
-        List<DataEntry> seriesData = new ArrayList<>();
+        List<DataEntry> seriesData = setGraphData(moodData);
+        /*
+        if(!moodData.isEmpty()){
+            for(int i = 0; i < moodData.size(); i++){
+                MoodEntry moodEntry = moodData.get(i);
+                seriesData.add(new CustomDataEntry(String.valueOf(moodEntry.getDay()),
+                        moodEntry.getPA(), moodEntry.getNA()));
+            }
+        }
+
+
         seriesData.add(new CustomDataEntry(String.valueOf(moodEntry.getDay()),
                 moodEntry.getPA(), moodEntry.getNA()));
         seriesData.add(new CustomDataEntry("1987", 7.1, 4.0));
@@ -73,7 +84,7 @@ public class GraphActivity extends AppCompatActivity {
         seriesData.add(new CustomDataEntry("1992", 16.4, 18.0));
         seriesData.add(new CustomDataEntry("1993", 18.0, 23.3));
         seriesData.add(new CustomDataEntry("1994",
-                moodEntry.getPA(), moodEntry.getNA()));
+                moodEntry2.getPA(), moodEntry2.getNA()));
         seriesData.add(new CustomDataEntry("1995", 12.0, 18.0));
         seriesData.add(new CustomDataEntry("1996", 3.2, 15.1));
         seriesData.add(new CustomDataEntry("1997", 4.1, 11.3));
@@ -89,6 +100,7 @@ public class GraphActivity extends AppCompatActivity {
         seriesData.add(new CustomDataEntry("2007", 14.1, 20.7));
         seriesData.add(new CustomDataEntry("2008", 15.7, 21.6));
         seriesData.add(new CustomDataEntry("2009", 12.0, 22.5));
+         */
 
         Set set = Set.instantiate();
         set.data(seriesData);
@@ -96,7 +108,7 @@ public class GraphActivity extends AppCompatActivity {
         Mapping series2Mapping = set.mapAs("{ x: 'x', value: 'value2' }");
 
         Line series1 = cartesian.line(series1Mapping);
-        series1.name("Brandy");
+        series1.name("Positiver Affekt");
         series1.hovered().markers().enabled(true);
         series1.hovered().markers()
                 .type(MarkerType.CIRCLE)
@@ -108,7 +120,8 @@ public class GraphActivity extends AppCompatActivity {
                 .offsetY(5d);
 
         Line series2 = cartesian.line(series2Mapping);
-        series2.name("Whiskey");
+        series2.name("Negativer Affekt");
+        series2.stroke("red");
         series2.hovered().markers().enabled(true);
         series2.hovered().markers()
                 .type(MarkerType.CIRCLE)
@@ -137,5 +150,24 @@ public class GraphActivity extends AppCompatActivity {
 
     private List<MoodEntry> getListOfMoodEntriesMonth (int month){
         return xmoodEntryViewModel.getEntriesMonth(month);
+    }
+
+    /**
+     * Converts a List of Mood Entry into a List of DataEntries and returns it
+     *
+     * @param moodEntries List of a month of MoodEntries
+     * @return seriesList List for the line graph
+     */
+    private List<DataEntry> setGraphData(List<MoodEntry> moodEntries){
+        if(!moodEntries.isEmpty()){
+            List<DataEntry> seriesList = new ArrayList<>();
+            for(int i = 0; i < moodEntries.size(); i++){
+                MoodEntry moodEntry = moodEntries.get(i);
+                seriesList.add(new CustomDataEntry(String.valueOf(moodEntry.getDay()),
+                        moodEntry.getPA(), moodEntry.getNA()));
+            }
+            return seriesList;
+        }
+        return null;
     }
 }

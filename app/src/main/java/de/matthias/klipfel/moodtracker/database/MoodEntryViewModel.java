@@ -29,9 +29,11 @@ public class MoodEntryViewModel extends AndroidViewModel {
         try {
             return mRepository.getMoodEntriesMonth(i);
         } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+            System.out.println("I caught: " + e);
+            return null;
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println("I caught: " + e);
+            return null;
         }
     }
 }
