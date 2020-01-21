@@ -163,6 +163,9 @@ public class VoteActivity extends AppCompatActivity {
         int levelNA1 = negAff1.getRating();
         int levelNA2 = negAff2.getRating();
         int levelNA3 = negAff3.getRating();
+        //prepares data for saving
+        int PATotal = levelPA1 + levelPA2 + levelPA3;
+        int NATotal = levelNA1 + levelNA2 + levelNA3;
         //get current date
         Date date = new Date();
         //formats date as described
@@ -170,9 +173,7 @@ public class VoteActivity extends AppCompatActivity {
         DateFormat dayFormat = new SimpleDateFormat("dd");
         DateFormat monthFormat = new SimpleDateFormat("MM");
         DateFormat yearFormat = new SimpleDateFormat("yyyy");
-        //prepares data for saving
-        int PATotal = levelPA1 + levelPA2 + levelPA3;
-        int NATotal = levelNA1 + levelNA2 + levelNA3;
+
         //String datum = yearFormat.format(date);
 
         int day = Integer.parseInt(dayFormat.format(date));
@@ -183,10 +184,9 @@ public class VoteActivity extends AppCompatActivity {
         testText = (TextView) findViewById(R.id.testTextView);
         testText.setText(Integer.toString(PATotal)+" " + Integer.toString(NATotal) + " "
                 + month);
-        //save in database
         //repository.insertMoodEntry(new MoodEntry(PATotal,NATotal,datum));
-        MoodEntry moodEntry = new MoodEntry(PATotal,NATotal,day,month,year);
-        xmoodEntryViewModel.insert(moodEntry);
+        //save in database
+        xmoodEntryViewModel.insert(new MoodEntry(PATotal,NATotal,day,month,year));
         Log.i("Room","added");
     }
 }
