@@ -1,10 +1,12 @@
 package de.matthias.klipfel.moodtracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.room.Room;
 import de.matthias.klipfel.moodtracker.database.MoodEntry;
 import de.matthias.klipfel.moodtracker.database.MoodEntryRepository;
 import de.matthias.klipfel.moodtracker.database.MoodEntryRoomDatabase;
+import de.matthias.klipfel.moodtracker.database.MoodEntryViewModel;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +23,8 @@ import java.util.Date;
 
 public class VoteActivity extends AppCompatActivity {
 
-    public MoodEntryRepository repository;
+    //public MoodEntryRepository repository;
+    private MoodEntryViewModel xmoodEntryViewModel;
     private static final String TAG = "VoteActivity";
     private static final String [] pa1 = {"Aktiv","Interessiert","Freudig erregt", "Stark"};
     private static final String [] pa2 = {"Angeregt","Stolz","Begeistert", "Wach"};
@@ -54,7 +57,9 @@ public class VoteActivity extends AppCompatActivity {
         //moodEntryRoomDatabase = Room.databaseBuilder(getApplicationContext(),
         //        MoodEntryRoomDatabase.class, "mooddb").build();
 
-        repository = new MoodEntryRepository(getApplication());
+        //repository = new MoodEntryRepository(getApplication());
+
+        xmoodEntryViewModel = ViewModelProviders.of(this).get(MoodEntryViewModel.class);
 
         //Set random Text for the textViews
         textPos1 = findViewById(R.id.textPos1);
@@ -171,7 +176,9 @@ public class VoteActivity extends AppCompatActivity {
         testText.setText(Integer.toString(PATotal)+" " + Integer.toString(NATotal) + " "
                 + datum);
         //save in database
-        repository.insertMoodEntry(new MoodEntry(PATotal,NATotal,datum));
+        //repository.insertMoodEntry(new MoodEntry(PATotal,NATotal,datum));
+        MoodEntry moodEntry = new MoodEntry(PATotal,NATotal,datum);
+        xmoodEntryViewModel.insert(moodEntry);
         Log.i("Room","added");
     }
 }
