@@ -3,6 +3,7 @@ package de.matthias.klipfel.moodtracker.database;
 import android.app.Application;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -23,4 +24,14 @@ public class MoodEntryViewModel extends AndroidViewModel {
     LiveData<List<MoodEntry>> getmAllMoodEntries() { return mAllMoodEntries; }
 
     public void insert (MoodEntry moodEntry) { mRepository.insertMoodEntry(moodEntry);}
+
+    public List<MoodEntry> getEntriesMonth (int i) {
+        try {
+            return mRepository.getMoodEntriesMonth(i);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

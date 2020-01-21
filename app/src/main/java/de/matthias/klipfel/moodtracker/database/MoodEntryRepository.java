@@ -4,6 +4,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import androidx.lifecycle.LiveData;
 
@@ -27,6 +28,16 @@ public class MoodEntryRepository {
     }
 
     /**
+     * Returns all scores, which are achieved at the given mode.
+     *
+     * @param selectedMonth the mode
+     * @return MoodEntries of the given month
+     */
+    public List<MoodEntry> getMoodEntriesMonth(int selectedMonth) throws ExecutionException, InterruptedException {
+        return new getAsyncTask(mMoodEntryDao).execute(selectedMonth).get();
+    }
+
+    /**
      * {@link AsyncTask} for inserting operations.
      */
     private static class insertAsyncTask extends AsyncTask<MoodEntry, Void, Void> {
@@ -41,6 +52,20 @@ public class MoodEntryRepository {
         protected Void doInBackground(MoodEntry... moodEntries) {
             moodEntryDao.insert(moodEntries[0]);
             return null;
+        }
+    }
+
+    private static class getAsyncTask extends AsyncTask<Integer, Void, List<MoodEntry>> {
+
+        private final MoodEntryDao moodEntryDao;
+
+        getAsyncTask(MoodEntryDao dao) {
+            this.moodEntryDao = dao;
+        }
+
+        @Override
+        protected List<MoodEntry> doInBackground(Integer... integers) {
+            return moodEntryDao.getAllEntriesMonth();
         }
     }
 }

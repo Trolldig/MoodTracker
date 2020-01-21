@@ -14,13 +14,20 @@ public class MoodEntry {
     private int mPA;
     @ColumnInfo(name = "neg_aff")
     private int mNA;
-    @ColumnInfo(name = "date")
-    private String mDate;
+    @ColumnInfo(name = "day")
+    private int mDay;
+    @ColumnInfo(name = "month")
+    private int mMonth;
+    @ColumnInfo(name = "year")
+    private int mYear;
 
-    public MoodEntry(@NonNull int pA, @NonNull int nA, @NonNull String date){
+    public MoodEntry(@NonNull int pA, @NonNull int nA, @NonNull int day, @NonNull int month,
+                     @NonNull int year){
         this.mPA = pA;
         this.mNA = nA;
-        this.mDate = date;
+        this.mDay = day;
+        this.mMonth = month;
+        this.mYear = year;
     }
 
     public int getPA() {
@@ -31,7 +38,15 @@ public class MoodEntry {
         return this.mNA;
     }
 
-    public String getDate() {
-        return this.mDate;
+    public int getDay() {
+        return this.mDay;
+    }
+
+    public int getMonth() {
+        return this.mMonth;
+    }
+
+    public int getYear() {
+        return this.mYear;
     }
 }

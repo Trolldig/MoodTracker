@@ -1,6 +1,9 @@
 package de.matthias.klipfel.moodtracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import de.matthias.klipfel.moodtracker.database.MoodEntry;
+import de.matthias.klipfel.moodtracker.database.MoodEntryViewModel;
 
 import android.os.Bundle;
 
@@ -23,10 +26,14 @@ import java.util.List;
 
 public class GraphActivity extends AppCompatActivity {
 
+    private MoodEntryViewModel xmoodEntryViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
+
+        xmoodEntryViewModel = ViewModelProviders.of(this).get(MoodEntryViewModel.class);
 
         AnyChartView anyChartView = findViewById(R.id.any_chart_view);
         anyChartView.setProgressBar(findViewById(R.id.progress_bar));
@@ -52,8 +59,12 @@ public class GraphActivity extends AppCompatActivity {
         cartesian.yAxis(0).title("Number of Bottles Sold (thousands)");
         cartesian.xAxis(0).labels().padding(5d, 5d, 5d, 5d);
 
+        List<MoodEntry> moodData = getListOfMoodEntriesMonth(1);
+        MoodEntry moodEntry = moodData.get(0);
+
         List<DataEntry> seriesData = new ArrayList<>();
-        seriesData.add(new CustomDataEntry("1986", 3.6, 2.3));
+        seriesData.add(new CustomDataEntry(String.valueOf(moodEntry.getDay()),
+                moodEntry.getPA(), moodEntry.getNA()));
         seriesData.add(new CustomDataEntry("1987", 7.1, 4.0));
         seriesData.add(new CustomDataEntry("1988", 8.5, 6.2));
         seriesData.add(new CustomDataEntry("1989", 9.2, 11.8));
@@ -61,7 +72,8 @@ public class GraphActivity extends AppCompatActivity {
         seriesData.add(new CustomDataEntry("1991", 11.6, 13.9));
         seriesData.add(new CustomDataEntry("1992", 16.4, 18.0));
         seriesData.add(new CustomDataEntry("1993", 18.0, 23.3));
-        seriesData.add(new CustomDataEntry("1994", 13.2, 24.7));
+        seriesData.add(new CustomDataEntry("1994",
+                moodEntry.getPA(), moodEntry.getNA()));
         seriesData.add(new CustomDataEntry("1995", 12.0, 18.0));
         seriesData.add(new CustomDataEntry("1996", 3.2, 15.1));
         seriesData.add(new CustomDataEntry("1997", 4.1, 11.3));
@@ -121,5 +133,9 @@ public class GraphActivity extends AppCompatActivity {
             super(x, value);
             setValue("value2", value2);
         }
+    }
+
+    private List<MoodEntry> getListOfMoodEntriesMonth (int month){
+        return xmoodEntryViewModel.getEntriesMonth(month);
     }
 }
