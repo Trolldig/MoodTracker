@@ -26,12 +26,12 @@ public class VoteActivity extends AppCompatActivity {
     //public MoodEntryRepository repository;
     private MoodEntryViewModel xmoodEntryViewModel;
     private static final String TAG = "VoteActivity";
-    private static final String [] pa1 = {"Aktiv","Interessiert","Freudig erregt", "Stark"};
-    private static final String [] pa2 = {"Angeregt","Stolz","Begeistert", "Wach"};
-    private static final String [] pa3 = {"Entschlossen","Aufmerksam"};
-    private static final String [] neg1 = {"Bekümmert","Verärgert","Schuldig", "Erschrocken"};
-    private static final String [] neg2 = {"Feindselig","Gereizt","Beschämt", "Nervös"};
-    private static final String [] neg3 = {"Durcheinander","Ängstlich"};
+    private static final String[] pa1 = {"Aktiv", "Interessiert", "Freudig erregt", "Stark"};
+    private static final String[] pa2 = {"Angeregt", "Stolz", "Begeistert", "Wach"};
+    private static final String[] pa3 = {"Entschlossen", "Aufmerksam"};
+    private static final String[] neg1 = {"Bekümmert", "Verärgert", "Schuldig", "Erschrocken"};
+    private static final String[] neg2 = {"Feindselig", "Gereizt", "Beschämt", "Nervös"};
+    private static final String[] neg3 = {"Durcheinander", "Ängstlich"};
 
 
     private TextView textPos1;
@@ -95,55 +95,52 @@ public class VoteActivity extends AppCompatActivity {
         safeButton.setText("Übernehmen");
 
         /**Test to show the selected data
-        safeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int levelPA1 = posAff1.getRating();
-                int levelPA2 = posAff2.getRating();
-                testText = (TextView) findViewById(R.id.testTextView);
-                testText.setText(Integer.toString(levelPA1)+" "+Integer.toString(levelPA2));
-            }
+         safeButton.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+        int levelPA1 = posAff1.getRating();
+        int levelPA2 = posAff2.getRating();
+        testText = (TextView) findViewById(R.id.testTextView);
+        testText.setText(Integer.toString(levelPA1)+" "+Integer.toString(levelPA2));
+        }
         });
-        **/
+         **/
 
         //Set Listener for the first Vote
         /**
-        posAff1.setOnSmileySelectionListener(new SmileRating.OnSmileySelectionListener() {
-            @Override
-            public void onSmileySelected( int smiley, boolean reselected){
-                // reselected is false when user selects different smiley that previously selected one
-                // true when the same smiley is selected.
-                // Except if it first time, then the value will be false.
-                switch (smiley) {
-                    case SmileRating.BAD:
-                        Log.i(TAG, "Wenig");
-                        break;
-                    case SmileRating.GOOD:
-                        Log.i(TAG, "Good");
-                        break;
-                    case SmileRating.GREAT:
-                        Log.i(TAG, "Great");
-                        break;
-                    case SmileRating.OKAY:
-                        Log.i(TAG, "Okay");
-                        break;
-                    case SmileRating.TERRIBLE:
-                        Log.i(TAG, "Terrible");
-                        break;
-                }
-            }
+         posAff1.setOnSmileySelectionListener(new SmileRating.OnSmileySelectionListener() {
+        @Override public void onSmileySelected( int smiley, boolean reselected){
+        // reselected is false when user selects different smiley that previously selected one
+        // true when the same smiley is selected.
+        // Except if it first time, then the value will be false.
+        switch (smiley) {
+        case SmileRating.BAD:
+        Log.i(TAG, "Wenig");
+        break;
+        case SmileRating.GOOD:
+        Log.i(TAG, "Good");
+        break;
+        case SmileRating.GREAT:
+        Log.i(TAG, "Great");
+        break;
+        case SmileRating.OKAY:
+        Log.i(TAG, "Okay");
+        break;
+        case SmileRating.TERRIBLE:
+        Log.i(TAG, "Terrible");
+        break;
+        }
+        }
         });
-        //Get selected Smiley for the first Vote
-        posAff1.setOnRatingSelectedListener(new SmileRating.OnRatingSelectedListener() {
-            @Override
-            public void onRatingSelected(int level, boolean reselected) {
-                Log.i(TAG, "Level: " + level);
-            }
+         //Get selected Smiley for the first Vote
+         posAff1.setOnRatingSelectedListener(new SmileRating.OnRatingSelectedListener() {
+        @Override public void onRatingSelected(int level, boolean reselected) {
+        Log.i(TAG, "Level: " + level);
+        }
         });
          **/
     }
 
-    protected void setSmileRatingNames(SmileRating rating){
+    protected void setSmileRatingNames(SmileRating rating) {
         rating.setNameForSmile(BaseRating.TERRIBLE, "Gar nicht");
         rating.setNameForSmile(BaseRating.BAD, "Wenig");
         rating.setNameForSmile(BaseRating.OKAY, "Einigermaßen");
@@ -151,8 +148,8 @@ public class VoteActivity extends AppCompatActivity {
         rating.setNameForSmile(BaseRating.GREAT, "Äußerst");
     }
 
-    protected static String selectRand(String[] array){
-        int rnd = (int)(Math.random()*array.length);
+    protected static String selectRand(String[] array) {
+        int rnd = (int) (Math.random() * array.length);
         return array[rnd];
     }
 
@@ -182,11 +179,10 @@ public class VoteActivity extends AppCompatActivity {
 
         //display in text view for testing
         testText = (TextView) findViewById(R.id.testTextView);
-        testText.setText(Integer.toString(PATotal)+" " + Integer.toString(NATotal) + " "
-                + month);
+        testText.setText(PATotal + " " + NATotal + " " + month);
         //repository.insertMoodEntry(new MoodEntry(PATotal,NATotal,datum));
         //save in database
-        xmoodEntryViewModel.insert(new MoodEntry(PATotal,NATotal,day,month,year));
-        Log.i("Room","added");
+        xmoodEntryViewModel.insert(new MoodEntry(PATotal, NATotal, day, month, year));
+        Log.i("Room", "added");
     }
 }

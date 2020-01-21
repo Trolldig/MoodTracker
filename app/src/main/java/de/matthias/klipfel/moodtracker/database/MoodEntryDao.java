@@ -17,6 +17,14 @@ public interface MoodEntryDao {
     @Query("SELECT * FROM mood_entry_table WHERE month = 1 ORDER BY day ASC")
     List<MoodEntry> getAllEntriesMonth();
 
+    /**
+     * Updating Affect
+     * By date
+     */
+    @Query("UPDATE mood_entry_table SET pos_aff = :posAff, neg_aff = :negAff WHERE id = :id")
+    void update(int posAff, int negAff, int id);
+
+
     @Query("DELETE FROm mood_entry_table")
     void deleteAll();
 

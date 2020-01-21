@@ -9,7 +9,8 @@ import androidx.room.PrimaryKey;
 public class MoodEntry {
 
     @PrimaryKey(autoGenerate = true)
-    @NonNull
+    @ColumnInfo(name = "id")
+    private int id;
     @ColumnInfo(name = "pos_aff")
     private int mPA;
     @ColumnInfo(name = "neg_aff")
@@ -30,6 +31,10 @@ public class MoodEntry {
         this.mYear = year;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public int getPA() {
         return this.mPA;
     }
@@ -48,5 +53,25 @@ public class MoodEntry {
 
     public int getYear() {
         return this.mYear;
+    }
+
+    public void setmPA(int mPA) {
+        this.mPA = mPA;
+    }
+
+    public void setmNA(int mNA) {
+        this.mNA = mNA;
+    }
+
+    public void setmDay(int mDay) {
+        this.mDay = mDay;
+    }
+
+    public void setmMonth(int mMonth) {
+        this.mMonth = mMonth;
+    }
+
+    public void setmYear(int mYear) {
+        this.mYear = mYear;
     }
 }

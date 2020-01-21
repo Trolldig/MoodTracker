@@ -142,7 +142,7 @@ public class GraphActivity extends AppCompatActivity {
 
     private class CustomDataEntry extends ValueDataEntry {
 
-        CustomDataEntry(String x, Number value, Number value2) {
+        CustomDataEntry(Number x, Number value, Number value2) {
             super(x, value);
             setValue("value2", value2);
         }
@@ -163,7 +163,7 @@ public class GraphActivity extends AppCompatActivity {
             List<DataEntry> seriesList = new ArrayList<>();
             for(int i = 0; i < moodEntries.size(); i++){
                 MoodEntry moodEntry = moodEntries.get(i);
-                seriesList.add(new CustomDataEntry(String.valueOf(moodEntry.getDay()),
+                seriesList.add(new CustomDataEntry(moodEntry.getDay(),
                         moodEntry.getPA(), moodEntry.getNA()));
             }
             return seriesList;

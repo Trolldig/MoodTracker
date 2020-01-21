@@ -19,7 +19,7 @@ public class MoodEntryRepository {
         mAllMoodEntries = mMoodEntryDao.getAllMoodEntries();
     }
 
-    LiveData<List<MoodEntry>> getAllMoodEntries() {
+    public LiveData<List<MoodEntry>> getAllMoodEntries() {
         return mAllMoodEntries;
     }
 
@@ -51,6 +51,21 @@ public class MoodEntryRepository {
         @Override
         protected Void doInBackground(MoodEntry... moodEntries) {
             moodEntryDao.insert(moodEntries[0]);
+            return null;
+        }
+    }
+
+    private static class updateAsyncTask extends AsyncTask<Integer, Void, Void>{
+
+        private final MoodEntryDao moodEntryDao;
+
+        updateAsyncTask(MoodEntryDao moodEntryDao) {
+            this.moodEntryDao = moodEntryDao;
+        }
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            moodEntryDao.update(integers[0], integers[1], integers[2]);
             return null;
         }
     }
