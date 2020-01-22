@@ -11,14 +11,19 @@ public class MoodEntry {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
+
     @ColumnInfo(name = "pos_aff")
     private int mPA;
+
     @ColumnInfo(name = "neg_aff")
     private int mNA;
+
     @ColumnInfo(name = "day")
     private int mDay;
+
     @ColumnInfo(name = "month")
     private int mMonth;
+
     @ColumnInfo(name = "year")
     private int mYear;
 
@@ -53,6 +58,18 @@ public class MoodEntry {
 
     public int getYear() {
         return this.mYear;
+    }
+
+    /**
+     * Sets the entry id. Is used by the Database.
+     *
+     * @param id the id
+     * @deprecated because the id is auto-generated
+     */
+    @Deprecated
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setmPA(int mPA) {
