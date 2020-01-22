@@ -1,5 +1,6 @@
 package de.matthias.klipfel.moodtracker;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.room.Room;
@@ -8,11 +9,18 @@ import de.matthias.klipfel.moodtracker.database.MoodEntryRepository;
 import de.matthias.klipfel.moodtracker.database.MoodEntryRoomDatabase;
 import de.matthias.klipfel.moodtracker.database.MoodEntryViewModel;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hsalf.smilerating.BaseRating;
 import com.hsalf.smilerating.SmileRating;
@@ -20,6 +28,7 @@ import com.hsalf.smilerating.SmileRating;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class VoteActivity extends AppCompatActivity {
 
@@ -48,6 +57,11 @@ public class VoteActivity extends AppCompatActivity {
     private SmileRating negAff2;
     private SmileRating negAff3;
     private Button safeButton;
+    private int PATotal = 0;
+    private int NATotal = 0;
+    private int day;
+    private int month;
+    private int year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,8 +175,13 @@ public class VoteActivity extends AppCompatActivity {
         int levelNA2 = negAff2.getRating();
         int levelNA3 = negAff3.getRating();
         //prepares data for saving
-        int PATotal = levelPA1 + levelPA2 + levelPA3;
-        int NATotal = levelNA1 + levelNA2 + levelNA3;
+        PATotal = levelPA1 + levelPA2 + levelPA3;
+        NATotal = levelNA1 + levelNA2 + levelNA3;
+        //check if a vote is missing
+        boolean allVotesSelected = false;
+        if (levelPA1 != 0 && levelPA2 != 0 && levelPA3 != 0 && levelNA1 != 0 && levelNA2 != 0 && levelNA3 != 0) {
+            allVotesSelected = true;
+        }
         //get current date
         Date date = new Date();
         //formats date as described
@@ -173,16 +192,69 @@ public class VoteActivity extends AppCompatActivity {
 
         //String datum = yearFormat.format(date);
 
-        int day = Integer.parseInt(dayFormat.format(date));
-        int month = Integer.parseInt(monthFormat.format(date));
-        int year = Integer.parseInt(yearFormat.format(date));
+        day = Integer.parseInt(dayFormat.format(date));
+        month = Integer.parseInt(monthFormat.format(date));
+        year = Integer.parseInt(yearFormat.format(date));
 
         //display in text view for testing
         testText = (TextView) findViewById(R.id.testTextView);
         testText.setText(PATotal + " " + NATotal + " " + month);
         //repository.insertMoodEntry(new MoodEntry(PATotal,NATotal,datum));
         //save in database
-        xmoodEntryViewModel.insert(new MoodEntry(PATotal, NATotal, day, month, year));
-        Log.i("Room", "added");
+        //check if all votes are selected
+        if(allVotesSelected){
+            //check if a vote with the same date exists already
+            //insert if no vote exists, else show dialog
+            if(xmoodEntryViewModel.checkForEntry(day, month, year) == null){
+                xmoodEntryViewModel.insert(new MoodEntry(PATotal, NATotal, day, month, year));
+                Toast.makeText(VoteActivity.this, "Hinzugefügt!",
+                        Toast.LENGTH_SHORT).show();
+                Log.i("Room", "added");
+                openMainActivity();
+            } else {
+                showAlertDialogUpdateWarning(view);
+            }
+        } else {
+            showAlertDialogVoteMissing(view);
+        }
+    }
+
+    public void showAlertDialogVoteMissing(View view) {        // setup the alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Warnung");
+        builder.setMessage("Es wurden nicht alle Felder ausgewählt.");        // add a button
+        builder.setPositiveButton("OK", null);        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void showAlertDialogUpdateWarning(View view) {        // setup the alert builder
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Warnung");
+        builder.setMessage("Es kann pro Tag nur eine Eingabe getätigt werden. " +
+                "Möchten sie die Eingabe von heute überschreiben?");        // add the buttons
+        builder.setPositiveButton("Überschreiben", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                xmoodEntryViewModel.updateMoodEntry(PATotal, NATotal, day, month, year);
+                PATotal = 0;
+                NATotal = 0;
+                day = 0;
+                month = 0;
+                year = 0;
+                Log.i("Room", "updated");
+                Toast.makeText(VoteActivity.this, "Hinzugefügt!",
+                        Toast.LENGTH_SHORT).show();
+                openMainActivity();
+            }
+        });
+        builder.setNegativeButton("Abbrechen", null);     // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void openMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

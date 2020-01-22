@@ -27,7 +27,29 @@ public class MoodEntryViewModel extends AndroidViewModel {
 
     public List<MoodEntry> getEntriesMonth (int i) {
         try {
-            return mRepository.getMoodEntriesMonth(i);
+            return mRepository.getAllEntriesMonth(i);
+        } catch (ExecutionException e) {
+            System.out.println("I caught: " + e);
+            return null;
+        } catch (InterruptedException e) {
+            System.out.println("I caught: " + e);
+            return null;
+        }
+    }
+
+    public void updateMoodEntry (int pA, int nA, int day, int month, int year) {
+        try {
+            mRepository.updateMoodEntry(pA, nA, day,month,year);
+        } catch (ExecutionException e) {
+            System.out.println("I caught: " + e);
+        } catch (InterruptedException e) {
+            System.out.println("I caught: " + e);
+        }
+    }
+
+    public MoodEntry checkForEntry (int day, int month, int year) {
+        try {
+            return mRepository.checkForEntry(day,month,year);
         } catch (ExecutionException e) {
             System.out.println("I caught: " + e);
             return null;

@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".GraphActivity"
-            android:label="Graph?"
+            android:label="Stimmungsbarometer"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

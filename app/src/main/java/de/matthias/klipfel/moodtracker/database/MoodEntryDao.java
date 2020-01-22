@@ -14,18 +14,21 @@ public interface MoodEntryDao {
     @Insert
     void insert(MoodEntry moodEntry);
 
-    @Query("SELECT * FROM mood_entry_table WHERE month = 1 ORDER BY day ASC")
-    List<MoodEntry> getAllEntriesMonth();
+    @Query("SELECT * FROM mood_entry_table WHERE month = :month ORDER BY day ASC")
+    List<MoodEntry> getAllEntriesMonth(int month);
 
     /**
      * Updating Affect
      * By date
      */
-    @Query("UPDATE mood_entry_table SET pos_aff = :posAff, neg_aff = :negAff WHERE id = :id")
-    void update(int posAff, int negAff, int id);
+    @Query("UPDATE mood_entry_table SET pos_aff = :posAff, neg_aff = :negAff WHERE day = :day AND month = :month AND year = :year")
+    void update(int posAff, int negAff, int day, int month, int year);
+
+    @Query(" SELECT * from mood_entry_table  WHERE day = :day AND month = :month AND year = :year ORDER BY day ASC")
+    MoodEntry checkForEntry(int day, int month, int year);
 
 
-    @Query("DELETE FROm mood_entry_table")
+    @Query("DELETE FROM mood_entry_table")
     void deleteAll();
 
     @Query("SELECT * from mood_entry_table ORDER BY day ASC")

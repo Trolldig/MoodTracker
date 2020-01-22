@@ -27,14 +27,30 @@ public class MoodEntryRepository {
         new insertAsyncTask(mMoodEntryDao).execute(moodEntry);
     }
 
+    public void updateMoodEntry (int pA, int nA, int day, int month, int year) throws ExecutionException, InterruptedException {
+        new updateAsyncTask(mMoodEntryDao).execute(pA, nA, day, month, year);
+    }
+
     /**
-     * Returns all scores, which are achieved at the given mode.
+     * Returns Entries of a given month
      *
-     * @param selectedMonth the mode
+     * @param selectedMonth
      * @return MoodEntries of the given month
      */
-    public List<MoodEntry> getMoodEntriesMonth(int selectedMonth) throws ExecutionException, InterruptedException {
+    public List<MoodEntry> getAllEntriesMonth(int selectedMonth) throws ExecutionException, InterruptedException {
         return new getAsyncTask(mMoodEntryDao).execute(selectedMonth).get();
+    }
+
+    /**
+     * Returns an entry if one already exists on this date
+     *
+     * @param day
+     * @param month
+     * @param year
+     * @return Entry of the given date
+     */
+    public MoodEntry checkForEntry(int day, int month, int year) throws ExecutionException, InterruptedException {
+        return new checkForEntryAsyncTask(mMoodEntryDao).execute(day,month,year).get();
     }
 
     /**
@@ -65,7 +81,7 @@ public class MoodEntryRepository {
 
         @Override
         protected Void doInBackground(Integer... integers) {
-            moodEntryDao.update(integers[0], integers[1], integers[2]);
+            moodEntryDao.update(integers[0], integers[1], integers[2], integers[3], integers[4]);
             return null;
         }
     }
@@ -80,7 +96,21 @@ public class MoodEntryRepository {
 
         @Override
         protected List<MoodEntry> doInBackground(Integer... integers) {
-            return moodEntryDao.getAllEntriesMonth();
+            return moodEntryDao.getAllEntriesMonth(integers[0]);
+        }
+    }
+
+    private static class checkForEntryAsyncTask extends AsyncTask<Integer, Void, MoodEntry> {
+
+        private final MoodEntryDao moodEntryDao;
+
+        checkForEntryAsyncTask(MoodEntryDao dao) {
+            this.moodEntryDao = dao;
+        }
+
+        @Override
+        protected MoodEntry doInBackground(Integer... integers) {
+            return moodEntryDao.checkForEntry(integers[0], integers [1], integers[2]);
         }
     }
 }
