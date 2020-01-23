@@ -2,6 +2,7 @@ package de.matthias.klipfel.moodtracker.database;
 
 import android.app.Application;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -25,9 +26,9 @@ public class MoodEntryViewModel extends AndroidViewModel {
 
     public void insert (MoodEntry moodEntry) { mRepository.insertMoodEntry(moodEntry);}
 
-    public List<MoodEntry> getEntriesMonth (int i) {
+    public List<MoodEntry> getEntriesMonth (Calendar from, Calendar to){
         try {
-            return mRepository.getAllEntriesMonth(i);
+            return mRepository.getAllEntriesMonth(from, to);
         } catch (ExecutionException e) {
             System.out.println("I caught: " + e);
             return null;
@@ -37,9 +38,9 @@ public class MoodEntryViewModel extends AndroidViewModel {
         }
     }
 
-    public void updateMoodEntry (int pA, int nA, int day, int month, int year) {
+    public void updateMoodEntry (int pA, int nA, Calendar date) {
         try {
-            mRepository.updateMoodEntry(pA, nA, day,month,year);
+            mRepository.updateMoodEntry(pA, nA, date);
         } catch (ExecutionException e) {
             System.out.println("I caught: " + e);
         } catch (InterruptedException e) {
@@ -47,9 +48,9 @@ public class MoodEntryViewModel extends AndroidViewModel {
         }
     }
 
-    public MoodEntry checkForEntry (int day, int month, int year) {
+    public MoodEntry checkForEntry (Calendar date) {
         try {
-            return mRepository.checkForEntry(day,month,year);
+            return mRepository.checkForEntry(date);
         } catch (ExecutionException e) {
             System.out.println("I caught: " + e);
             return null;
@@ -57,5 +58,9 @@ public class MoodEntryViewModel extends AndroidViewModel {
             System.out.println("I caught: " + e);
             return null;
         }
+    }
+
+    public LiveData<List<MoodEntry>> getAll(){
+        return mRepository.getAllMoodEntries();
     }
 }

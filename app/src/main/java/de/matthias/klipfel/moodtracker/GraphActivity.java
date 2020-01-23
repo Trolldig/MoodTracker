@@ -1,11 +1,13 @@
 package de.matthias.klipfel.moodtracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import de.matthias.klipfel.moodtracker.database.MoodEntry;
 import de.matthias.klipfel.moodtracker.database.MoodEntryViewModel;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,24 +26,26 @@ import com.anychart.data.Set;
 import com.anychart.enums.Anchor;
 import com.anychart.enums.MarkerType;
 import com.anychart.enums.TooltipPositionMode;
+import com.anychart.graphics.vector.ColoredFill;
 import com.anychart.graphics.vector.Stroke;
+import com.borax12.materialdaterangepicker.date.DatePickerDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 
-public class GraphActivity extends AppCompatActivity {
+public class GraphActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private MoodEntryViewModel xmoodEntryViewModel;
-    private TextView textMonth;
-    private TextView textYear;
-    private EditText editMonth;
-    private EditText editYear;
     private AnyChartView anyChartView;
+    private FloatingActionButton chooseDateButton;
 
+    private int day;
     private int month;
     private int year;
     private List<MoodEntry> moodData;
@@ -53,6 +57,12 @@ public class GraphActivity extends AppCompatActivity {
     private Line series1;
     private Line series2;
 
+    private boolean graphSet;
+
+
+    private Calendar from;
+    private Calendar to;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,23 +71,35 @@ public class GraphActivity extends AppCompatActivity {
 
         xmoodEntryViewModel = ViewModelProviders.of(this).get(MoodEntryViewModel.class);
 
-        textMonth = findViewById(R.id.textMonth);
-        textMonth.setText("Monat: ");
-        textYear = findViewById(R.id.textYear);
-        textYear.setText("Jahr: ");
-        editMonth = findViewById(R.id.month_text_input);
-        editYear = findViewById(R.id.year_text_input);
+        chooseDateButton = findViewById(R.id.choose_date_button);
+        chooseDateButton.setOnClickListener(this::chooseDate);
+
+        graphSet = false;
+
         setCurrentDate();
-        editMonth.setText(String.valueOf(month));
-        editYear.setText(String.valueOf(year));
 
-        setMoodDataMonth(month);
 
-        setGraph();
+        anyChartView = findViewById(R.id.any_chart_view);
+        anyChartView.setProgressBar(findViewById(R.id.progress_bar));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        chooseDate(anyChartView);
+    }
+
+    private void chooseDate(View view) {
+        setCurrentDate();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(this,
+                year, // Initial year selection
+                month, // Initial month selection
+                day // Inital day selection
+        );
+        dpd.show(getFragmentManager(), null);
     }
 
     public void confirmChanges(View view) {
-        month = Integer.parseInt(editMonth.getText().toString());
         Log.d("Confirm", "month: " + month);
         anyChartView = null;
         moodData = null;
@@ -92,11 +114,42 @@ public class GraphActivity extends AppCompatActivity {
         setGraph();
     }
 
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        from = Calendar.getInstance();
+        from.set(Calendar.YEAR, year);
+        from.set(Calendar.MONTH, monthOfYear);
+        from.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        from.set(Calendar.HOUR, 0);
+        from.set(Calendar.MINUTE, 0);
+        from.set(Calendar.SECOND, 0);
+        from.set(Calendar.MILLISECOND, 0);
+        to = Calendar.getInstance();
+        to.set(Calendar.YEAR, yearEnd);
+        to.set(Calendar.MONTH, monthOfYearEnd);
+        to.set(Calendar.DAY_OF_MONTH, dayOfMonthEnd);
+        to.set(Calendar.HOUR, 0);
+        to.set(Calendar.MINUTE, 0);
+        to.set(Calendar.SECOND, 0);
+        to.set(Calendar.MILLISECOND, 0);
+
+
+        moodData = xmoodEntryViewModel.getEntriesMonth(from, to);
+        LiveData<List<MoodEntry>> all = xmoodEntryViewModel.getAll();
+        List<MoodEntry> fuckthisshit = all.getValue();
+        if (!graphSet) {
+            setGraph();
+        } else {
+            updateGraph();
+        }
+
+    }
+
     private class CustomDataEntry extends ValueDataEntry {
 
-        CustomDataEntry(Number x, Number value, Number value2) {
+        CustomDataEntry(String x, Number value, Number value1) {
             super(x, value);
-            setValue("value2", value2);
+            setValue("value1", value1);
         }
     }
 
@@ -106,42 +159,44 @@ public class GraphActivity extends AppCompatActivity {
      * @param moodEntries List of a month of MoodEntries
      * @return seriesList List for the line graph
      */
-    private List<DataEntry> setGraphData(List<MoodEntry> moodEntries){
-        if(!moodEntries.isEmpty()){
+    private List<DataEntry> setGraphData(List<MoodEntry> moodEntries) {
+        if (moodEntries != null && !moodEntries.isEmpty()) {
             List<DataEntry> seriesList = new ArrayList<>();
-            for(int i = 0; i < moodEntries.size(); i++){
-                MoodEntry moodEntry = moodEntries.get(i);
-                seriesList.add(new CustomDataEntry(moodEntry.getDay(),
-                        moodEntry.getPA(), moodEntry.getNA()));
+            for (MoodEntry moodEntry : moodEntries) {
+                String dateName = "" + moodEntry.getDate().get(Calendar.DAY_OF_MONTH) + "." +
+                        (moodEntry.getDate().get(Calendar.MONTH) + 1);
+                seriesList.add(new CustomDataEntry(dateName, moodEntry.getPA(), moodEntry.getNA()));
             }
             return seriesList;
         }
         return null;
     }
 
-    private void setCurrentDate(){
+    private void setCurrentDate() {
         //get current date
-        Date date = new Date();
-        //formats date as described
-        DateFormat monthFormat = new SimpleDateFormat("MM");
-        DateFormat yearFormat = new SimpleDateFormat("yyyy");
-
-        month = Integer.parseInt(monthFormat.format(date));
-        year = Integer.parseInt(yearFormat.format(date));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        month = calendar.get(Calendar.MONTH);
+        year = calendar.get(Calendar.YEAR);
     }
 
-    private void setMoodDataMonth(int month){
-        moodData = getListOfMoodEntriesMonth(month);
+
+    private void setMoodDataMonth(int month) {
+        //moodData = getListOfMoodEntriesMonth(month);
     }
 
+    /*
     private List<MoodEntry> getListOfMoodEntriesMonth (int month){
         return xmoodEntryViewModel.getEntriesMonth(month);
-    }
+    }*/
 
-    private void setGraph(){
+    private void setGraph() {
 
-        anyChartView = findViewById(R.id.any_chart_view);
-        anyChartView.setProgressBar(findViewById(R.id.progress_bar));
+        graphSet = true;
 
         //Koordinatensystem soll line chart sein
         cartesian = AnyChart.line();
@@ -165,14 +220,12 @@ public class GraphActivity extends AppCompatActivity {
         cartesian.xAxis(0).labels().padding(5d, 5d, 5d, 5d);
         cartesian.xAxis(0).title("Tag");
 
-        setMoodDataMonth(month);
-
         seriesData = setGraphData(moodData);
 
         set = Set.instantiate();
         set.data(seriesData);
         series1Mapping = set.mapAs("{ x: 'x', value: 'value' }");
-        series2Mapping = set.mapAs("{ x: 'x', value: 'value2' }");
+        series2Mapping = set.mapAs("{ x: 'x', value: 'value1' }");
 
         series1 = cartesian.line(series1Mapping);
         series1.name("Positiv");
@@ -205,5 +258,14 @@ public class GraphActivity extends AppCompatActivity {
         cartesian.legend().padding(0d, 0d, 10d, 0d);
 
         anyChartView.setChart(cartesian);
+    }
+
+    private void updateGraph() {
+        Handler handler = new Handler();
+        Runnable runnable = () -> {
+            seriesData = setGraphData(moodData);
+            set.data(seriesData);
+        };
+        handler.post(runnable);
     }
 }

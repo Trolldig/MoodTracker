@@ -3,6 +3,8 @@ package de.matthias.klipfel.moodtracker.database;
 import android.app.Application;
 import android.os.AsyncTask;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -27,8 +29,8 @@ public class MoodEntryRepository {
         new insertAsyncTask(mMoodEntryDao).execute(moodEntry);
     }
 
-    public void updateMoodEntry (int pA, int nA, int day, int month, int year) throws ExecutionException, InterruptedException {
-        new updateAsyncTask(mMoodEntryDao).execute(pA, nA, day, month, year);
+    public void updateMoodEntry (int pA, int nA, Calendar date) throws ExecutionException, InterruptedException {
+        new updateAsyncTask(mMoodEntryDao, date).execute(pA, nA);
     }
 
     /**
@@ -37,8 +39,8 @@ public class MoodEntryRepository {
      * @param selectedMonth
      * @return MoodEntries of the given month
      */
-    public List<MoodEntry> getAllEntriesMonth(int selectedMonth) throws ExecutionException, InterruptedException {
-        return new getAsyncTask(mMoodEntryDao).execute(selectedMonth).get();
+    public List<MoodEntry> getAllEntriesMonth(Calendar from, Calendar to) throws ExecutionException, InterruptedException {
+        return new getAsyncTask(mMoodEntryDao).execute(from, to).get();
     }
 
     /**
@@ -49,8 +51,8 @@ public class MoodEntryRepository {
      * @param year
      * @return Entry of the given date
      */
-    public MoodEntry checkForEntry(int day, int month, int year) throws ExecutionException, InterruptedException {
-        return new checkForEntryAsyncTask(mMoodEntryDao).execute(day,month,year).get();
+    public MoodEntry checkForEntry(Calendar date) throws ExecutionException, InterruptedException {
+        return new checkForEntryAsyncTask(mMoodEntryDao).execute(date).get();
     }
 
     /**
@@ -74,19 +76,21 @@ public class MoodEntryRepository {
     private static class updateAsyncTask extends AsyncTask<Integer, Void, Void>{
 
         private final MoodEntryDao moodEntryDao;
+        private final Calendar date;
 
-        updateAsyncTask(MoodEntryDao moodEntryDao) {
+        updateAsyncTask(MoodEntryDao moodEntryDao, Calendar date) {
             this.moodEntryDao = moodEntryDao;
+            this.date = date;
         }
 
         @Override
         protected Void doInBackground(Integer... integers) {
-            moodEntryDao.update(integers[0], integers[1], integers[2], integers[3], integers[4]);
+            moodEntryDao.update(integers[0], integers[1], date);
             return null;
         }
     }
 
-    private static class getAsyncTask extends AsyncTask<Integer, Void, List<MoodEntry>> {
+    private static class getAsyncTask extends AsyncTask<Calendar, Void, List<MoodEntry>> {
 
         private final MoodEntryDao moodEntryDao;
 
@@ -95,12 +99,12 @@ public class MoodEntryRepository {
         }
 
         @Override
-        protected List<MoodEntry> doInBackground(Integer... integers) {
-            return moodEntryDao.getAllEntriesMonth(integers[0]);
+        protected List<MoodEntry> doInBackground(Calendar... dates) {
+            return moodEntryDao.getAllEntriesMonth(dates[0], dates[1]);
         }
     }
 
-    private static class checkForEntryAsyncTask extends AsyncTask<Integer, Void, MoodEntry> {
+    private static class checkForEntryAsyncTask extends AsyncTask<Calendar, Void, MoodEntry> {
 
         private final MoodEntryDao moodEntryDao;
 
@@ -109,8 +113,8 @@ public class MoodEntryRepository {
         }
 
         @Override
-        protected MoodEntry doInBackground(Integer... integers) {
-            return moodEntryDao.checkForEntry(integers[0], integers [1], integers[2]);
+        protected MoodEntry doInBackground(Calendar... dates) {
+            return moodEntryDao.checkForEntry(dates[0]);
         }
     }
 }

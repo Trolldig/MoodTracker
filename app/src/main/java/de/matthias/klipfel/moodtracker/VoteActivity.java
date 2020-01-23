@@ -27,6 +27,7 @@ import com.hsalf.smilerating.SmileRating;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class VoteActivity extends AppCompatActivity {
     private Button safeButton;
     private int PATotal = 0;
     private int NATotal = 0;
+    private Calendar calendar;
     private int day;
     private int month;
     private int year;
@@ -183,18 +185,16 @@ public class VoteActivity extends AppCompatActivity {
             allVotesSelected = true;
         }
         //get current date
-        Date date = new Date();
         //formats date as described
         //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        DateFormat dayFormat = new SimpleDateFormat("dd");
-        DateFormat monthFormat = new SimpleDateFormat("MM");
-        DateFormat yearFormat = new SimpleDateFormat("yyyy");
+        calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
-        //String datum = yearFormat.format(date);
+        long timeMillies = calendar.getTimeInMillis();
 
-        day = Integer.parseInt(dayFormat.format(date));
-        month = Integer.parseInt(monthFormat.format(date));
-        year = Integer.parseInt(yearFormat.format(date));
 
         //display in text view for testing
         testText = (TextView) findViewById(R.id.testTextView);
@@ -205,12 +205,12 @@ public class VoteActivity extends AppCompatActivity {
         if(allVotesSelected){
             //check if a vote with the same date exists already
             //insert if no vote exists, else show dialog
-            if(xmoodEntryViewModel.checkForEntry(day, month, year) == null){
-                xmoodEntryViewModel.insert(new MoodEntry(PATotal, NATotal, day, month, year));
+            if(xmoodEntryViewModel.checkForEntry(calendar) == null){
+                xmoodEntryViewModel.insert(new MoodEntry(PATotal, NATotal, calendar));
                 Toast.makeText(VoteActivity.this, "Hinzugefügt!",
                         Toast.LENGTH_SHORT).show();
                 Log.i("Room", "added");
-                openMainActivity();
+                finish();
             } else {
                 showAlertDialogUpdateWarning(view);
             }
@@ -236,7 +236,7 @@ public class VoteActivity extends AppCompatActivity {
                 "Möchten sie die Eingabe von heute überschreiben?");        // add the buttons
         builder.setPositiveButton("Überschreiben", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                xmoodEntryViewModel.updateMoodEntry(PATotal, NATotal, day, month, year);
+                xmoodEntryViewModel.updateMoodEntry(PATotal, NATotal, calendar);
                 PATotal = 0;
                 NATotal = 0;
                 day = 0;
@@ -245,7 +245,7 @@ public class VoteActivity extends AppCompatActivity {
                 Log.i("Room", "updated");
                 Toast.makeText(VoteActivity.this, "Hinzugefügt!",
                         Toast.LENGTH_SHORT).show();
-                openMainActivity();
+                finish();
             }
         });
         builder.setNegativeButton("Abbrechen", null);     // create and show the alert dialog
@@ -253,8 +253,4 @@ public class VoteActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void openMainActivity(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
 }

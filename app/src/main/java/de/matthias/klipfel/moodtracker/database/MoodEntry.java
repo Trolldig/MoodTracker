@@ -1,5 +1,8 @@
 package de.matthias.klipfel.moodtracker.database;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -18,22 +21,13 @@ public class MoodEntry {
     @ColumnInfo(name = "neg_aff")
     private int mNA;
 
-    @ColumnInfo(name = "day")
-    private int mDay;
+    @ColumnInfo(name="date")
+    private Calendar date;
 
-    @ColumnInfo(name = "month")
-    private int mMonth;
-
-    @ColumnInfo(name = "year")
-    private int mYear;
-
-    public MoodEntry(@NonNull int pA, @NonNull int nA, @NonNull int day, @NonNull int month,
-                     @NonNull int year){
+    public MoodEntry(@NonNull int pA, @NonNull int nA, Calendar date){
         this.mPA = pA;
         this.mNA = nA;
-        this.mDay = day;
-        this.mMonth = month;
-        this.mYear = year;
+        this.date = date;
     }
 
     public int getId() {
@@ -48,17 +42,6 @@ public class MoodEntry {
         return this.mNA;
     }
 
-    public int getDay() {
-        return this.mDay;
-    }
-
-    public int getMonth() {
-        return this.mMonth;
-    }
-
-    public int getYear() {
-        return this.mYear;
-    }
 
     /**
      * Sets the entry id. Is used by the Database.
@@ -80,15 +63,11 @@ public class MoodEntry {
         this.mNA = mNA;
     }
 
-    public void setmDay(int mDay) {
-        this.mDay = mDay;
+    public Calendar getDate() {
+        return date;
     }
 
-    public void setmMonth(int mMonth) {
-        this.mMonth = mMonth;
-    }
-
-    public void setmYear(int mYear) {
-        this.mYear = mYear;
+    public void setDate(Calendar date) {
+        this.date = date;
     }
 }

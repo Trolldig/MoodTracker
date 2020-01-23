@@ -1,5 +1,7 @@
 package de.matthias.klipfel.moodtracker.database;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -14,23 +16,23 @@ public interface MoodEntryDao {
     @Insert
     void insert(MoodEntry moodEntry);
 
-    @Query("SELECT * FROM mood_entry_table WHERE month = :month ORDER BY day ASC")
-    List<MoodEntry> getAllEntriesMonth(int month);
+    @Query("SELECT * FROM mood_entry_table WHERE date BETWEEN :from AND :to")
+    List<MoodEntry> getAllEntriesMonth(Calendar from, Calendar to);
 
     /**
      * Updating Affect
      * By date
      */
-    @Query("UPDATE mood_entry_table SET pos_aff = :posAff, neg_aff = :negAff WHERE day = :day AND month = :month AND year = :year")
-    void update(int posAff, int negAff, int day, int month, int year);
+    @Query("UPDATE mood_entry_table SET pos_aff = :posAff, neg_aff = :negAff WHERE date=:date")
+    void update(int posAff, int negAff, Calendar date);
 
-    @Query(" SELECT * from mood_entry_table  WHERE day = :day AND month = :month AND year = :year ORDER BY day ASC")
-    MoodEntry checkForEntry(int day, int month, int year);
+    @Query(" SELECT * from mood_entry_table  WHERE date=:date")
+    MoodEntry checkForEntry(Calendar date);
 
 
     @Query("DELETE FROM mood_entry_table")
     void deleteAll();
 
-    @Query("SELECT * from mood_entry_table ORDER BY day ASC")
+    @Query("SELECT * from mood_entry_table")
     LiveData<List<MoodEntry>> getAllMoodEntries();
 }
