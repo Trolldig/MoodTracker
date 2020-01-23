@@ -33,7 +33,6 @@ import java.util.List;
 
 public class VoteActivity extends AppCompatActivity {
 
-    //public MoodEntryRepository repository;
     private MoodEntryViewModel xmoodEntryViewModel;
     private static final String TAG = "VoteActivity";
     private static final String[] pa1 = {"Aktiv", "Interessiert", "Freudig erregt", "Stark"};
@@ -50,7 +49,6 @@ public class VoteActivity extends AppCompatActivity {
     private TextView textNeg1;
     private TextView textNeg2;
     private TextView textNeg3;
-    private TextView testText;
     private SmileRating posAff1;
     private SmileRating posAff2;
     private SmileRating posAff3;
@@ -61,19 +59,12 @@ public class VoteActivity extends AppCompatActivity {
     private int PATotal = 0;
     private int NATotal = 0;
     private Calendar calendar;
-    private int day;
-    private int month;
-    private int year;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote);
-
-        //moodEntryRoomDatabase = Room.databaseBuilder(getApplicationContext(),
-        //        MoodEntryRoomDatabase.class, "mooddb").build();
-
-        //repository = new MoodEntryRepository(getApplication());
 
         xmoodEntryViewModel = ViewModelProviders.of(this).get(MoodEntryViewModel.class);
 
@@ -109,51 +100,6 @@ public class VoteActivity extends AppCompatActivity {
 
         safeButton = (Button) findViewById(R.id.safeButton);
         safeButton.setText("Übernehmen");
-
-        /**Test to show the selected data
-         safeButton.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View view) {
-        int levelPA1 = posAff1.getRating();
-        int levelPA2 = posAff2.getRating();
-        testText = (TextView) findViewById(R.id.testTextView);
-        testText.setText(Integer.toString(levelPA1)+" "+Integer.toString(levelPA2));
-        }
-        });
-         **/
-
-        //Set Listener for the first Vote
-        /**
-         posAff1.setOnSmileySelectionListener(new SmileRating.OnSmileySelectionListener() {
-        @Override public void onSmileySelected( int smiley, boolean reselected){
-        // reselected is false when user selects different smiley that previously selected one
-        // true when the same smiley is selected.
-        // Except if it first time, then the value will be false.
-        switch (smiley) {
-        case SmileRating.BAD:
-        Log.i(TAG, "Wenig");
-        break;
-        case SmileRating.GOOD:
-        Log.i(TAG, "Good");
-        break;
-        case SmileRating.GREAT:
-        Log.i(TAG, "Great");
-        break;
-        case SmileRating.OKAY:
-        Log.i(TAG, "Okay");
-        break;
-        case SmileRating.TERRIBLE:
-        Log.i(TAG, "Terrible");
-        break;
-        }
-        }
-        });
-         //Get selected Smiley for the first Vote
-         posAff1.setOnRatingSelectedListener(new SmileRating.OnRatingSelectedListener() {
-        @Override public void onRatingSelected(int level, boolean reselected) {
-        Log.i(TAG, "Level: " + level);
-        }
-        });
-         **/
     }
 
     protected void setSmileRatingNames(SmileRating rating) {
@@ -186,7 +132,6 @@ public class VoteActivity extends AppCompatActivity {
         }
         //get current date
         //formats date as described
-        //DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -195,11 +140,6 @@ public class VoteActivity extends AppCompatActivity {
 
         long timeMillies = calendar.getTimeInMillis();
 
-
-        //display in text view for testing
-        testText = (TextView) findViewById(R.id.testTextView);
-        testText.setText(PATotal + " " + NATotal + " " + month);
-        //repository.insertMoodEntry(new MoodEntry(PATotal,NATotal,datum));
         //save in database
         //check if all votes are selected
         if(allVotesSelected){
@@ -221,7 +161,7 @@ public class VoteActivity extends AppCompatActivity {
 
     public void showAlertDialogVoteMissing(View view) {        // setup the alert builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Warnung");
+        builder.setTitle("Achtung!");
         builder.setMessage("Es wurden nicht alle Felder ausgewählt.");        // add a button
         builder.setPositiveButton("OK", null);        // create and show the alert dialog
         AlertDialog dialog = builder.create();
@@ -231,7 +171,7 @@ public class VoteActivity extends AppCompatActivity {
     public void showAlertDialogUpdateWarning(View view) {        // setup the alert builder
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Warnung");
+        builder.setTitle("Achtung!");
         builder.setMessage("Es kann pro Tag nur eine Eingabe getätigt werden. " +
                 "Möchten sie die Eingabe von heute überschreiben?");        // add the buttons
         builder.setPositiveButton("Überschreiben", new DialogInterface.OnClickListener() {
@@ -239,9 +179,6 @@ public class VoteActivity extends AppCompatActivity {
                 xmoodEntryViewModel.updateMoodEntry(PATotal, NATotal, calendar);
                 PATotal = 0;
                 NATotal = 0;
-                day = 0;
-                month = 0;
-                year = 0;
                 Log.i("Room", "updated");
                 Toast.makeText(VoteActivity.this, "Hinzugefügt!",
                         Toast.LENGTH_SHORT).show();

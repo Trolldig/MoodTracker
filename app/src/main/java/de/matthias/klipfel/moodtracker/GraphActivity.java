@@ -99,21 +99,6 @@ public class GraphActivity extends AppCompatActivity implements DatePickerDialog
         dpd.show(getFragmentManager(), null);
     }
 
-    public void confirmChanges(View view) {
-        Log.d("Confirm", "month: " + month);
-        anyChartView = null;
-        moodData = null;
-        seriesData = null;
-        set = null;
-        cartesian = null;
-        series1Mapping = null;
-        series2Mapping = null;
-        series1 = null;
-        series2 = null;
-        setMoodDataMonth(month);
-        setGraph();
-    }
-
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
         from = Calendar.getInstance();
@@ -183,16 +168,6 @@ public class GraphActivity extends AppCompatActivity implements DatePickerDialog
         month = calendar.get(Calendar.MONTH);
         year = calendar.get(Calendar.YEAR);
     }
-
-
-    private void setMoodDataMonth(int month) {
-        //moodData = getListOfMoodEntriesMonth(month);
-    }
-
-    /*
-    private List<MoodEntry> getListOfMoodEntriesMonth (int month){
-        return xmoodEntryViewModel.getEntriesMonth(month);
-    }*/
 
     private void setGraph() {
 

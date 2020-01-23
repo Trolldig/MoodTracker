@@ -28,12 +28,7 @@ public class MainActivity extends AppCompatActivity {
         //Button for the voting activity
         voteButton = (Button) findViewById(R.id.voteButton);
         voteButton.setText("Wie Geht's?");
-        /*voteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openVoteActivity();
-            }
-        });*/
+
         //Button for the graph activity
         graphButton = (Button) findViewById(R.id.graphButton);
         graphButton.setText("Übersicht");
